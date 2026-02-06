@@ -1,6 +1,0 @@
-*.docx
-pycache/
-*.pyc
-.env
-node_modules/
-catalog/fixtures/
