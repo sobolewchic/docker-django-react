@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: django
+      POSTGRES_PASSWORD: django
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - back_net
+
+  backend:
+    image: backend:latest
+    environment:
+      DATABASE_HOST: db
+      DATABASE_USER: django
+      DATABASE_PASSWORD: django
+      DATABASE_PORT: 5432
+      DATABASE_NAME: django
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - front_net
+      - back_net
+
+  frontend:
+    image: front:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - front_net
+
+volumes:
+  postgres_data:
+networks:
+  front_net:
+    driver: bridge
+  back_net:
+    driver: bridge
+
