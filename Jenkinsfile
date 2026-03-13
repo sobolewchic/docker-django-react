@@ -1,6 +1,9 @@
 pipeline {
     agent any
-
+    
+    options {
+        skipDefaultCheckout()
+    }
     environment {
         COMPOSE_PROJECT_NAME = "django-react"
     }
