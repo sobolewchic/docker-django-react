@@ -9,10 +9,10 @@ pipeline {
 
         stage('Clean workspace') {
             steps {
-                deliteDir()
+                deleteDir()
             }
         }
-        
+
         stage('Checkout') {
             steps {
                 git(
