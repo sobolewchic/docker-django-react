@@ -7,6 +7,12 @@ pipeline {
 
     stages {
 
+        stage('Clean workspace') {
+            steps {
+                deliteDir()
+            }
+        }
+        
         stage('Checkout') {
             steps {
                 git(
