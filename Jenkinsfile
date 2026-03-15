@@ -21,7 +21,7 @@ pipeline {
 
         stage('Backend tests') {
             steps {
-                sh 'docker compose exec -T django pytest'
+                sh 'docker compose exec -T backend pytest'
             }
         }
 
