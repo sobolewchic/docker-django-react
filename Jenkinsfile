@@ -24,11 +24,11 @@ pipeline {
                 sh 'docker compose exec -T backend pytest'
             }
         }
+    }
 
-        stage('Stop services') {
-            steps {
-                sh 'docker compose down'
-            }
+    post {
+        always {
+            sh 'docker compose down'
         }
     }
 }
