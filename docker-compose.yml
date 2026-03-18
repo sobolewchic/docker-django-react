@@ -14,10 +14,9 @@ services:
       - back_net
 
   backend:
-    backend:
-      build:
-        context: .
-        dockerfile: Dockerfile_backend
+    build:
+      context: .
+      dockerfile: Dockerfile_backend
     image: backend:latest
     environment:
       DATABASE_HOST: db
