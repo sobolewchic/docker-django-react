@@ -15,7 +15,7 @@ services:
 
   backend:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile_backend
     image: backend:latest
     environment:
