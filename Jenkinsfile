@@ -1,34 +1,138 @@
 pipeline {
+
     agent any
-    
+
+
     environment {
-        COMPOSE_PROJECT_NAME = "django-react"
+
+        REGISTRY = "192.168.126.128:8082"
+
+        BACKEND_IMAGE = "${REGISTRY}/backend"
+
+        FRONTEND_IMAGE = "${REGISTRY}/frontend"
+
+        TAG = "${BUILD_NUMBER}"
+
     }
+
 
     stages {
 
-        stage('Docker compose build') {
+
+        stage('Checkout') {
+
             steps {
-                sh 'docker compose build --no-cache'
+
+                git branch: 'main',
+                url: 'https://github.com/sobolewchic/docker-django-react.git'
+
             }
+
         }
 
-        stage('Start services') {
+
+        stage('Docker Login') {
+
             steps {
-                sh 'docker compose up -d'
+
+                withCredentials([
+                    usernamePassword(
+                        credentialsId: 'nexus',
+                        usernameVariable: 'USER',
+                        passwordVariable: 'PASS'
+                    )
+                ]) {
+
+                    sh '''
+
+                    echo $PASS | docker login ${REGISTRY} \
+                    -u $USER \
+                    --password-stdin
+
+                    '''
+
+                }
+
             }
+
         }
 
-        stage('Backend tests') {
+
+        stage('Build Backend') {
+
             steps {
-                sh 'docker compose run --rm backend python -m pytest'
+
+                sh '''
+
+                docker build \
+                -t ${BACKEND_IMAGE}:${TAG} \
+                ./backend
+
+                '''
+
             }
+
         }
+
+
+        stage('Build Frontend') {
+
+            steps {
+
+                sh '''
+
+                docker build \
+                -t ${FRONTEND_IMAGE}:${TAG} \
+                ./frontend
+
+                '''
+
+            }
+
+        }
+
+
+
+        stage('Push Images') {
+
+            steps {
+
+                sh '''
+
+                docker push ${BACKEND_IMAGE}:${TAG}
+
+                docker push ${FRONTEND_IMAGE}:${TAG}
+
+                '''
+
+            }
+
+        }
+
+
+
+        stage('Deploy Helm') {
+
+            steps {
+
+                sh '''
+
+                helm upgrade --install library ./helm \
+                --set backend.image.tag=${TAG} \
+                --set frontend.image.tag=${TAG}
+
+
+                kubectl rollout status deployment/backend
+
+                kubectl rollout status deployment/frontend
+
+                '''
+
+            }
+
+        }
+
     }
 
-    post {
-        always {
-            sh 'docker compose down'
-        }
-    }
+
 }

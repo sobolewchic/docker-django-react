@@ -1,0 +1,9 @@
+backend:
+  image:
+    repository: 192.168.126.128:8082/backend
+    tag: latest
+
+frontend:
+  image:
+    repository: 192.168.126.128:8082/frontend
+    tag: latest
