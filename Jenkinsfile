@@ -24,6 +24,7 @@ pipeline {
             steps {
 
                 git branch: 'main',
+                credentialsId: '6eb342a6-6716-443c-8f87-759415eb0277',
                 url: 'https://github.com/sobolewchic/docker-django-react.git'
 
             }
