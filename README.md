@@ -11,7 +11,7 @@ Django - backend API; React - frontend, собранный в production и от
 
 Структура проекта:
 
-<img width="316" height="467" alt="image" src="https://github.com/user-attachments/assets/5bb9f56c-9903-4552-ac86-211947ef3ff2" />
+<img width="292" height="493" alt="image" src="https://github.com/user-attachments/assets/1d801f09-6ea3-4898-983e-e75fada5f327" />
 
 Проект полностью поднимается одной командой:
 docker compose up -d
