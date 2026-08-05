@@ -5,7 +5,7 @@ pipeline {
 
     environment {
 
-        REGISTRY = "192.168.126.128:8082"
+        REGISTRY = "192.168.126.128:8443"
 
         BACKEND_IMAGE = "${REGISTRY}/backend"
 
